@@ -2,7 +2,7 @@
   "name": "CineVerse - Movie Streaming & AI Recommendations",
   "short_name": "CineVerse",
   "description": "Smart movie recommendations with Face Biometrics, Age Verification, and OTT Streaming.",
-  "start_url": "/dashboard.html",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#0b0f19",
   "theme_color": "#ffc107",
