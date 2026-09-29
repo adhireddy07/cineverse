@@ -1,0 +1,155 @@
+/* ========================================================
+   CINEVERSE MOBILE APP & NETFLIX-STYLE HORIZONTAL ROWS
+   ======================================================== */
+
+/* Bottom Navigation Bar for Mobile */
+.mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(15px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 9999;
+    padding: 8px 12px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.mobile-nav-item {
+    color: #94a3b8;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.mobile-nav-item i {
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
+.mobile-nav-item.active, .mobile-nav-item:hover {
+    color: #ffc107 !important;
+}
+
+/* Install App Banner */
+.install-app-banner {
+    display: none;
+    position: fixed;
+    bottom: 75px;
+    left: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 2px solid #ffc107;
+    border-radius: 16px;
+    padding: 12px 16px;
+    z-index: 9998;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-bottom: 85px !important;
+    }
+
+    .mobile-bottom-nav {
+        display: flex !important;
+    }
+
+    /* Netflix-style horizontal row scrolling for movie carousels */
+    #historyContainer, #recommendContainer, #trendingContainer, .movie-scroll-row {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        gap: 14px !important;
+        padding-bottom: 12px !important;
+        padding-left: 4px;
+        padding-right: 4px;
+        scrollbar-width: none !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    #historyContainer::-webkit-scrollbar,
+    #recommendContainer::-webkit-scrollbar,
+    #trendingContainer::-webkit-scrollbar,
+    .movie-scroll-row::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    #historyContainer > div,
+    #recommendContainer > div,
+    #trendingContainer > div,
+    .movie-scroll-row > div {
+        flex: 0 0 160px !important;
+        max-width: 160px !important;
+        width: 160px !important;
+        padding: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    #historyContainer .movie-card,
+    #recommendContainer .movie-card,
+    #trendingContainer .movie-card,
+    .movie-scroll-row .movie-card {
+        width: 160px !important;
+        border-radius: 14px !important;
+    }
+
+    #historyContainer .movie-card img,
+    #recommendContainer .movie-card img,
+    #trendingContainer .movie-card img,
+    .movie-scroll-row .movie-card img {
+        width: 160px !important;
+        height: 230px !important;
+        object-fit: cover !important;
+    }
+
+    #historyContainer .card-body,
+    #recommendContainer .card-body,
+    #trendingContainer .card-body,
+    .movie-scroll-row .card-body {
+        padding: 10px !important;
+    }
+
+    /* Grid pages (Favorites, Search results, Recommendations Grid) 2-columns on mobile */
+    #searchSection .row > div,
+    #recommendationsGrid > div,
+    #favContainer > div {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        padding: 6px !important;
+    }
+
+    #searchSection .movie-card img,
+    #recommendationsGrid .movie-img,
+    #favContainer .card img {
+        height: 230px !important;
+    }
+
+    /* Navbar simplification on mobile - bottom nav takes over page navigation */
+    .navbar .d-flex.align-items-center.flex-wrap.gap-2 > a {
+        display: none !important;
+    }
+
+    #searchInput {
+        width: 160px !important;
+    }
+
+    .navbar-brand {
+        font-size: 20px !important;
+    }
+
+    .container {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+}

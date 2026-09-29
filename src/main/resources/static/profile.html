@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profile - CineVerse</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+body {
+    background: #0b0f19;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+}
+.navbar {
+    background: rgba(15, 23, 42, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 14px 24px;
+}
+.profile-card {
+    background: rgba(22, 27, 34, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+}
+.avatar-img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ffc107;
+    box-shadow: 0 0 25px rgba(255, 193, 7, 0.4);
+    margin: 0 auto;
+    display: block;
+}
+.badge-status {
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-weight: 600;
+}
+</style>
+    <!-- Mobile App PWA Meta & Styles -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b0f19">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CineVerse">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="css/mobile-app.css">
+</head>
+<body>
+
+<nav class="navbar navbar-dark">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a class="navbar-brand text-warning fw-bold fs-4" href="dashboard.html">
+             CineVerse Profile
+        </a>
+        <a href="dashboard.html" class="btn btn-warning btn-sm fw-bold"> Dashboard</a>
+    </div>
+</nav>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="profile-card text-center">
+                <img id="profilePhoto" class="avatar-img mb-3" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+                <h3 id="profName" class="fw-bold text-white mb-1">User</h3>
+                <p id="profEmail" class="text-muted small mb-3">email@example.com</p>
+
+                <div class="mb-4">
+                    <span id="profAgeBadge" class="badge-status bg-success"> Verified Adult (20 yrs)</span>
+                    <span class="badge-status bg-warning text-dark ms-2"><i class="bi bi-shield-check"></i> Face Biometric Enrolled</span>
+                </div>
+
+                <hr class="border-secondary mb-4">
+
+                <div class="text-start mb-4">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label class="text-warning small fw-bold">DATE OF BIRTH</label>
+                            <div id="profDob" class="text-white fs-6">Not specified</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="text-warning small fw-bold">CALCULATED AGE</label>
+                            <div id="profAge" class="text-white fs-6">-</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="text-warning small fw-bold">CONTENT FILTER STATUS</label>
+                            <div id="profFilter" class="text-white fs-6">-</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="text-warning small fw-bold">FAVOURITE GENRES</label>
+                            <div id="profGenres" class="text-white fs-6">Action, Sci-Fi, Drama</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 justify-content-center">
+                    <a href="preferences.html" class="btn btn-outline-warning">
+                        <i class="bi bi-sliders me-1"></i> Edit Genres
+                    </a>
+                    <a href="favorites.html" class="btn btn-outline-danger">
+                        <i class="bi bi-heart me-1"></i> Favorites
+                    </a>
+                    <a href="dashboard.html" class="btn btn-warning fw-bold">
+                        Go to Dashboard
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/profile.js"></script>
+
+<!-- Mobile Bottom App Navigation Bar -->
+<div class="mobile-bottom-nav">
+    <a href="dashboard.html" class="mobile-nav-item">
+        <i class="bi bi-house-door-fill"></i>
+        <span>Home</span>
+    </a>
+    <a href="recommendation.html" class="mobile-nav-item">
+        <i class="bi bi-stars"></i>
+        <span>AI Picks</span>
+    </a>
+    <a href="favorites.html" class="mobile-nav-item">
+        <i class="bi bi-heart-fill"></i>
+        <span>Favorites</span>
+    </a>
+    <a href="feedback.html" class="mobile-nav-item">
+        <i class="bi bi-chat-dots-fill"></i>
+        <span>Feedback</span>
+    </a>
+    <a href="profile.html" class="mobile-nav-item">
+        <i class="bi bi-person-fill"></i>
+        <span>Profile</span>
+    </a>
+</div>
+
+<!-- Floating Install Mobile App Banner -->
+<div id="installBanner" class="install-app-banner">
+    <div class="d-flex align-items-center gap-2">
+        <img src="icons/icon-192.png" width="36" height="36" class="rounded-3" alt="App Icon">
+        <div>
+            <div class="fw-bold text-white small">Install CineVerse App</div>
+            <div class="text-muted" style="font-size:10px;">Fast Fullscreen Mobile Experience</div>
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-warning btn-sm fw-bold" id="installAppBtn">Install</button>
+        <button class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('installBanner').style.display='none'">✕</button>
+    </div>
+</div>
+
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").catch(e => console.warn(e));
+}
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const banner = document.getElementById('installBanner');
+    if (banner) banner.style.display = 'flex';
+});
+const installBtn = document.getElementById('installAppBtn');
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            document.getElementById('installBanner').style.display = 'none';
+        }
+    });
+}
+// Highlight active tab in mobile bottom nav
+document.querySelectorAll('.mobile-bottom-nav a').forEach(a => {
+    const href = a.getAttribute('href');
+    if (href && (window.location.pathname.endsWith(href) || (href === 'dashboard.html' && window.location.pathname === '/'))) {
+        document.querySelectorAll('.mobile-bottom-nav a').forEach(el => el.classList.remove('active'));
+        a.classList.add('active');
+    }
+});
+</script>
+</body>
+</html>

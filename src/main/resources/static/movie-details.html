@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie Details & OTT Platforms - CineVerse</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+body {
+    background: #0b0f19;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    min-height: 100vh;
+}
+.navbar {
+    background: rgba(15, 23, 42, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 14px 24px;
+}
+.poster-img {
+    width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.details-card {
+    background: rgba(22, 27, 34, 0.85);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 30px;
+}
+.player-simulator {
+    background: #000;
+    border-radius: 16px;
+    border: 2px solid #334155;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    margin-bottom: 24px;
+}
+.star-btn {
+    font-size: 28px;
+    cursor: pointer;
+    color: #4b5563;
+    transition: transform 0.2s, color 0.2s;
+}
+.star-btn.active, .star-btn:hover {
+    color: #ffc107;
+    transform: scale(1.2);
+}
+/* OTT Platform Badges */
+.ott-card {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+.ott-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    color: white !important;
+    transition: transform 0.2s;
+}
+.ott-btn:hover {
+    transform: translateY(-2px);
+}
+.ott-hotstar {
+    background: linear-gradient(135deg, #0f1014, #123356);
+    border: 1px solid #1a5ca4;
+}
+.ott-aha {
+    background: linear-gradient(135deg, #ff4500, #ff1a1a);
+    border: 1px solid #ff4500;
+}
+.ott-netflix {
+    background: #e50914;
+    border: 1px solid #e50914;
+}
+.ott-prime {
+    background: #00a8e1;
+    color: #000 !important;
+    border: 1px solid #00a8e1;
+}
+.ott-zee5 {
+    background: linear-gradient(135deg, #5b1191, #8f17bc);
+    border: 1px solid #8f17bc;
+}
+.ott-youtube {
+    background: #ff0000;
+    border: 1px solid #ff0000;
+}
+.btn-action-lg {
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+#restrictedShield {
+    display: none;
+    background: rgba(239, 68, 68, 0.1);
+    border: 2px solid #ef4444;
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+}
+</style>
+    <!-- Mobile App PWA Meta & Styles -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b0f19">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CineVerse">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="css/mobile-app.css">
+</head>
+<body>
+
+<nav class="navbar navbar-dark">
+    <div class="container d-flex justify-content-between align-items-center">
+        <a class="navbar-brand text-warning fw-bold fs-4" href="dashboard.html">
+             CineVerse
+        </a>
+        <div class="d-flex align-items-center gap-2">
+            <a href="favorites.html" class="btn btn-outline-danger btn-sm"><i class="bi bi-heart-fill me-1"></i> Favorites</a>
+            <a href="dashboard.html" class="btn btn-warning btn-sm fw-bold"><i class="bi bi-arrow-left me-1"></i> Dashboard</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-5">
+
+    <!-- Under-18 Content Restriction Alert -->
+    <div id="restrictedShield">
+        <i class="bi bi-shield-slash-fill text-danger display-1 mb-3"></i>
+        <h2 class="text-danger fw-bold"> Content Restricted</h2>
+        <h4 id="restrictedMovieTitle" class="text-white mb-3"></h4>
+        <p class="text-muted mx-auto" style="max-width: 500px;">
+            This movie is rated <strong>18+ / Horror</strong>. Under CineVerse's age verification system, access is strictly restricted for accounts under 18 years old.
+        </p>
+        <a href="dashboard.html" class="btn btn-warning mt-3 fw-bold">
+            <i class="bi bi-arrow-left me-1"></i> Return to Safe Dashboard
+        </a>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="row g-4" id="mainMovieContent">
+        <div class="col-md-4">
+            <img id="poster" class="poster-img mb-3" src="" alt="Poster" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&q=80';">
+            
+            <div class="d-grid gap-2">
+                <!-- Dedicated Watch Trailer Button -->
+                <a class="btn btn-warning btn-action-lg d-flex align-items-center justify-content-center gap-2" id="trailerBtn" href="#" target="_blank" rel="noopener noreferrer">
+                    <i class="bi bi-film"></i> <span>Watch Official Trailer</span>
+                </a>
+
+                <!-- Dedicated Watch on YouTube Button -->
+                <a class="btn btn-danger btn-action-lg d-flex align-items-center justify-content-center gap-2" id="youtubeWatchBtn" href="#" target="_blank" rel="noopener noreferrer">
+                    <i class="bi bi-youtube"></i> <span>Watch on YouTube</span>
+                </a>
+
+
+                <!-- Add to Favorites Button -->
+                <button class="btn btn-outline-danger btn-action-lg" id="favoriteBtn" onclick="toggleFavorite()">
+                    <i class="bi bi-heart-fill"></i> Add to Favorites
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="details-card">
+                <h1 id="title" class="fw-bold text-white mb-2"></h1>
+                
+                <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                    <span id="ageRatingBadge" class="badge bg-success fs-6">U/A</span>
+                    <span class="badge bg-secondary fs-6" id="year">2024</span>
+                    <span class="text-warning fw-bold fs-6"><i class="bi bi-star-fill text-warning me-1"></i><span id="rating"></span></span>
+                    <span class="text-white small ms-2"><i class="bi bi-translate text-warning me-1"></i><strong>Language:</strong> <span id="language" class="badge bg-dark border border-secondary">English</span></span>
+                </div>
+
+                <p class="text-warning small mb-3"><strong>Genres:</strong> <span id="genre" class="text-light"></span></p>
+
+                <!-- OTT Streaming Platforms Section -->
+                <div class="ott-card">
+                    <h5 class="text-warning fw-bold mb-2">
+                        <i class="bi bi-tv me-2"></i> Where to Watch (OTT Platforms)
+                    </h5>
+                    <p class="text-muted small mb-3">
+                        Watch or search this title directly on your favourite streaming services:
+                    </p>
+                    <div class="d-flex flex-wrap gap-2" id="ottButtonsContainer">
+                        <a id="btnHotstar" href="#" target="_blank" class="ott-btn ott-hotstar">
+                            <i class="bi bi-star-fill"></i> Disney+ Hotstar
+                        </a>
+                        <a id="btnAha" href="#" target="_blank" class="ott-btn ott-aha">
+                            <i class="bi bi-play-circle-fill"></i> aha Video
+                        </a>
+                        <a id="btnNetflix" href="#" target="_blank" class="ott-btn ott-netflix">
+                            <i class="bi bi-badge-hd-fill"></i> Netflix
+                        </a>
+                        <a id="btnPrime" href="#" target="_blank" class="ott-btn ott-prime">
+                            <i class="bi bi-collection-play-fill"></i> Prime Video
+                        </a>
+                        <a id="btnZee5" href="#" target="_blank" class="ott-btn ott-zee5">
+                            <i class="bi bi-play-btn-fill"></i> ZEE5
+                        </a>
+                        <a id="btnYtFull" href="#" target="_blank" class="ott-btn ott-youtube">
+                            <i class="bi bi-youtube"></i> YouTube Movies
+                        </a>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold text-white">Overview</h5>
+                <p id="overview" class="text-muted leading-relaxed mb-4"></p>
+
+                <!-- Watch Simulator Player -->
+                <div class="player-simulator">
+                    <h5 class="text-warning fw-bold mb-3"><i class="bi bi-play-btn-fill me-2"></i> CineVerse Stream Player</h5>
+                    <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
+                        <button class="btn btn-warning rounded-circle p-3" id="playBtn" onclick="togglePlay()">
+                            <i class="bi bi-play-fill fs-3" id="playIcon"></i>
+                        </button>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="small text-muted" id="currentTime">00:00</span>
+                        <input type="range" class="form-range" id="progressSlider" min="0" max="100" value="0" oninput="handleProgressChange(this.value)">
+                        <span class="small text-muted" id="totalDuration">02:15:00</span>
+                    </div>
+                    <div id="watchStatusNotice" class="small text-success mt-2" style="display:none;">
+                        <i class="bi bi-check-circle-fill me-1"></i> Progress saved to Continue Watching!
+                    </div>
+                </div>
+
+                <!-- Quick Review & Star Rating -->
+                <div class="mt-4 pt-3 border-top border-secondary">
+                    <h5 class="fw-bold text-white mb-2">Rate this Movie</h5>
+                    <div class="d-flex gap-2 mb-3" id="starRating">
+                        <i class="bi bi-star-fill text-warning star-btn fs-3" data-val="1" onclick="setRating(1)" style="cursor:pointer;" title="1 Star"></i>
+                        <i class="bi bi-star-fill text-warning star-btn fs-3" data-val="2" onclick="setRating(2)" style="cursor:pointer;" title="2 Stars"></i>
+                        <i class="bi bi-star-fill text-warning star-btn fs-3" data-val="3" onclick="setRating(3)" style="cursor:pointer;" title="3 Stars"></i>
+                        <i class="bi bi-star-fill text-warning star-btn fs-3" data-val="4" onclick="setRating(4)" style="cursor:pointer;" title="4 Stars"></i>
+                        <i class="bi bi-star-fill text-warning star-btn fs-3" data-val="5" onclick="setRating(5)" style="cursor:pointer;" title="5 Stars"></i>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="quickReviewText" class="form-control bg-dark text-white border-secondary" placeholder="Write a short review...">
+                        <button class="btn btn-warning fw-bold" onclick="submitQuickReview()">Submit Review</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/movie-details.js"></script>
+
+<!-- Mobile Bottom App Navigation Bar -->
+<div class="mobile-bottom-nav">
+    <a href="dashboard.html" class="mobile-nav-item">
+        <i class="bi bi-house-door-fill"></i>
+        <span>Home</span>
+    </a>
+    <a href="recommendation.html" class="mobile-nav-item">
+        <i class="bi bi-stars"></i>
+        <span>AI Picks</span>
+    </a>
+    <a href="favorites.html" class="mobile-nav-item">
+        <i class="bi bi-heart-fill"></i>
+        <span>Favorites</span>
+    </a>
+    <a href="feedback.html" class="mobile-nav-item">
+        <i class="bi bi-chat-dots-fill"></i>
+        <span>Feedback</span>
+    </a>
+    <a href="profile.html" class="mobile-nav-item">
+        <i class="bi bi-person-fill"></i>
+        <span>Profile</span>
+    </a>
+</div>
+
+<!-- Floating Install Mobile App Banner -->
+<div id="installBanner" class="install-app-banner">
+    <div class="d-flex align-items-center gap-2">
+        <img src="icons/icon-192.png" width="36" height="36" class="rounded-3" alt="App Icon">
+        <div>
+            <div class="fw-bold text-white small">Install CineVerse App</div>
+            <div class="text-muted" style="font-size:10px;">Fast Fullscreen Mobile Experience</div>
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-warning btn-sm fw-bold" id="installAppBtn">Install</button>
+        <button class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('installBanner').style.display='none'">✕</button>
+    </div>
+</div>
+
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").catch(e => console.warn(e));
+}
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const banner = document.getElementById('installBanner');
+    if (banner) banner.style.display = 'flex';
+});
+const installBtn = document.getElementById('installAppBtn');
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            document.getElementById('installBanner').style.display = 'none';
+        }
+    });
+}
+// Highlight active tab in mobile bottom nav
+document.querySelectorAll('.mobile-bottom-nav a').forEach(a => {
+    const href = a.getAttribute('href');
+    if (href && (window.location.pathname.endsWith(href) || (href === 'dashboard.html' && window.location.pathname === '/'))) {
+        document.querySelectorAll('.mobile-bottom-nav a').forEach(el => el.classList.remove('active'));
+        a.classList.add('active');
+    }
+});
+</script>
+</body>
+</html>
