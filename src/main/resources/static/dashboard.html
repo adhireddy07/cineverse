@@ -230,6 +230,31 @@ body.light-mode #searchInput {
 
 </div>
 
+<!-- In-Page YouTube Video Player Modal -->
+<div class="modal fade" id="trailerModal" tabindex="-1" aria-labelledby="trailerModalTitle" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-black text-white border border-warning" style="border-radius: 18px; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.9), 0 0 30px rgba(255, 193, 7, 0.4);">
+            <div class="modal-header border-secondary py-2 px-3 bg-dark d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2 overflow-hidden me-2">
+                    <span class="badge bg-danger text-uppercase px-2 py-1"><i class="bi bi-play-circle-fill me-1"></i> Trailer Player</span>
+                    <h6 class="modal-title text-warning fw-bold mb-0 text-truncate" id="trailerModalTitle">Movie Trailer</h6>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" id="closeTrailerModalBtn"></button>
+            </div>
+            <div class="modal-body p-0 bg-black">
+                <div class="ratio ratio-16x9">
+                    <iframe id="trailerIframe" src="" title="CineVerse In-Page Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border: none;"></iframe>
+                </div>
+            </div>
+            <div class="modal-footer border-secondary py-2 px-3 bg-dark d-flex justify-content-between align-items-center">
+                <span class="small text-muted"><i class="bi bi-tv text-warning me-1"></i> Playing inside CineVerse Cinema Player</span>
+                <button type="button" class="btn btn-warning btn-sm fw-bold px-3" data-bs-dismiss="modal">✕ Close Trailer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/config.js"></script>
 <script src="js/dashboard.js"></script>
 

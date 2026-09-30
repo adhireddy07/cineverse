@@ -38,6 +38,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (themeBtn) {
         themeBtn.addEventListener("click", toggleTheme);
     }
+
+    const modalEl = document.getElementById("trailerModal");
+    if (modalEl) {
+        modalEl.addEventListener("hidden.bs.modal", () => {
+            const iframe = document.getElementById("trailerIframe");
+            if (iframe) iframe.src = "";
+        });
+    }
 });
 
 function initUserPill() {
@@ -220,9 +228,12 @@ function renderMovieCard(m) {
                     </div>
                     <p class="text-muted small text-truncate mb-3">${m.releaseYear ? m.releaseYear + ' | ' : ''}${m.language || 'English'} | ${m.genre || "Cinema"}</p>
                     <div class="d-flex gap-2 mt-auto">
-                        <a href="movie-details.html?id=${m.id}" class="btn btn-warning btn-sm w-100 fw-bold">
+                        <a href="movie-details.html?id=${m.id}" class="btn btn-warning btn-sm flex-grow-1 fw-bold">
                             Details & OTT
                         </a>
+                        <button class="btn btn-outline-warning btn-sm" title="Watch Trailer In-Page" onclick="playInPageTrailer('${escapeQuote(m.title)}', '${escapeQuote(m.trailerUrl || '')}')">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </button>
                         <button class="btn btn-outline-danger btn-sm" title="Add to Favorites" onclick="quickAddFavorite(${m.id}, '${escapeQuote(m.title)}', '${escapeQuote(m.poster)}', '${escapeQuote(m.genre)}', ${m.rating})">
                             <i class="bi bi-heart-fill"></i>
                         </button>
@@ -231,6 +242,43 @@ function renderMovieCard(m) {
             </div>
         </div>
     `;
+}
+
+function extractYouTubeId(url) {
+    if (!url || typeof url !== "string") return null;
+    url = url.trim();
+    if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+    const regExp = /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i;
+    const match = url.match(regExp);
+    return (match && match[1]) ? match[1] : null;
+}
+
+function playInPageTrailer(title, trailerUrl) {
+    const videoId = extractYouTubeId(trailerUrl);
+    const iframe = document.getElementById("trailerIframe");
+    const titleEl = document.getElementById("trailerModalTitle");
+    const modalEl = document.getElementById("trailerModal");
+
+    if (!modalEl || !iframe) return;
+
+    if (titleEl) {
+        titleEl.textContent = (title || "Movie") + " - Official Trailer";
+    }
+
+    if (videoId) {
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+    } else {
+        const query = encodeURIComponent((title || "Movie") + " official trailer");
+        iframe.src = `https://www.youtube.com/embed?listType=search&list=${query}&autoplay=1`;
+    }
+
+    if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
+        const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modalInstance.show();
+    } else {
+        modalEl.classList.add("show");
+        modalEl.style.display = "block";
+    }
 }
 
 function escapeQuote(str) {

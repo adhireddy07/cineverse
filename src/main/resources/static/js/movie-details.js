@@ -35,16 +35,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const trailerBtn = document.getElementById("trailerBtn");
     if (trailerBtn) {
-        trailerBtn.addEventListener("click", function() {
-            this.href = getTrailerUrl();
+        trailerBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            openInPageTrailer(getTrailerUrl(), currentMovie ? currentMovie.title : "");
         });
     }
     const ytBtn = document.getElementById("youtubeWatchBtn");
     if (ytBtn) {
-        ytBtn.addEventListener("click", function() {
-            this.href = getYouTubeWatchUrl();
+        ytBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            openInPageTrailer(getTrailerUrl(), currentMovie ? currentMovie.title : "");
         });
     }
+
+    // Modal stop video on close so sound doesn't continue playing
+    const modalEl = document.getElementById("trailerModal");
+    if (modalEl) {
+        modalEl.addEventListener("hidden.bs.modal", () => {
+            const iframe = document.getElementById("trailerIframe");
+            if (iframe) iframe.src = "";
+        });
+    }
+
     loadMovieDetails();
 });
 
@@ -197,29 +209,68 @@ function getYouTubeWatchUrl() {
     return `https://www.youtube.com/results?search_query=${encodeURIComponent(title + " full movie")}`;
 }
 
+function extractYouTubeId(url) {
+    if (!url || typeof url !== "string") return null;
+    url = url.trim();
+    if (/^[a-zA-Z0-9_-]{11}$/.test(url)) {
+        return url;
+    }
+    const regExp = /(?:youtube(?:-nocookie)?\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i;
+    const match = url.match(regExp);
+    return (match && match[1]) ? match[1] : null;
+}
+
+function openInPageTrailer(urlOrKey, title) {
+    let videoId = extractYouTubeId(urlOrKey);
+    if (!videoId && officialTrailerKey) {
+        videoId = officialTrailerKey;
+    }
+    if (!videoId && currentMovie && currentMovie.trailerUrl) {
+        videoId = extractYouTubeId(currentMovie.trailerUrl);
+    }
+
+    const iframe = document.getElementById("trailerIframe");
+    const titleEl = document.getElementById("trailerModalTitle");
+    const modalEl = document.getElementById("trailerModal");
+
+    if (!modalEl || !iframe) {
+        console.error("Trailer modal elements not found in DOM");
+        return;
+    }
+
+    const movieName = title || (currentMovie ? currentMovie.title : "Movie");
+    if (titleEl) {
+        titleEl.textContent = movieName + " - Official Trailer";
+    }
+
+    if (videoId) {
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+    } else {
+        const query = encodeURIComponent(movieName + " official trailer");
+        iframe.src = `https://www.youtube.com/embed?listType=search&list=${query}&autoplay=1`;
+    }
+
+    if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
+        const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modalInstance.show();
+    } else {
+        modalEl.classList.add("show");
+        modalEl.style.display = "block";
+    }
+}
+
 function updateTrailerButtonUrls() {
-    const trailerBtn = document.getElementById("trailerBtn");
-    const ytBtn = document.getElementById("youtubeWatchBtn");
-    if (trailerBtn) {
-        trailerBtn.href = getTrailerUrl();
-        trailerBtn.target = "_blank";
-    }
-    if (ytBtn) {
-        ytBtn.href = getYouTubeWatchUrl();
-        ytBtn.target = "_blank";
-    }
+    // In-page player is actively attached to #trailerBtn and #youtubeWatchBtn
 }
 
 function watchOfficialTrailer(e) {
-    const url = getTrailerUrl();
-    const trailerBtn = document.getElementById("trailerBtn");
-    if (trailerBtn) trailerBtn.href = url;
+    if (e && e.preventDefault) e.preventDefault();
+    openInPageTrailer(getTrailerUrl(), currentMovie ? currentMovie.title : "");
 }
 
 function watchOnYouTube(e) {
-    const url = getYouTubeWatchUrl();
-    const ytBtn = document.getElementById("youtubeWatchBtn");
-    if (ytBtn) ytBtn.href = url;
+    if (e && e.preventDefault) e.preventDefault();
+    openInPageTrailer(getTrailerUrl(), currentMovie ? currentMovie.title : "");
 }
 
 
